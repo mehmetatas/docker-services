@@ -1,0 +1,8 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "test proxy",
+  "dependencies": {
+    "redbird": "^0.7.0"
+  }
+}

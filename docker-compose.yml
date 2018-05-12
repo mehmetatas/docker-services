@@ -1,0 +1,130 @@
+version: "3"
+
+services:
+
+  api:
+    image: mehmetatas/test-api-gateway
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "2"
+          memory: 4096M
+        reservations:
+          cpus: "1"
+          memory: 1024M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+    networks:
+      internal:
+
+  auth:
+    image: mehmetatas/test-auth-service
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 64M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80"
+    networks:
+      internal:
+        aliases:
+          - auth.internal.mehmetatas.net
+
+  image:
+    image: mehmetatas/test-image-service
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80"
+    networks:
+      internal:
+        aliases:
+          - image.internal.mehmetatas.net
+
+  product:
+    image: mehmetatas/test-product-service
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80"
+    networks:
+      internal:
+        aliases:
+          - product.internal.mehmetatas.net
+
+  seller:
+    image: mehmetatas/test-seller-service
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80"
+    networks:
+      internal:
+        aliases:
+          - seller.internal.mehmetatas.net
+
+  user:
+    image: mehmetatas/test-user-service
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80"
+    networks:
+      internal:
+        aliases:
+          - user.internal.mehmetatas.net
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - /server/data/mysql:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: "123456"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "4"
+          memory: 4096M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "3306"
+    networks:
+      internal:
+        aliases:
+          - mysql.internal.mehmetatas.net
+
+networks:
+  internal:
